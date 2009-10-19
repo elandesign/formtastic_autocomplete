@@ -1,0 +1,5 @@
+
+
+Don't forget to include the stylesheet in your application.html.erb
+<%= stylesheet_link_tag 'autocomplete' %>
+

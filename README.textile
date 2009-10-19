@@ -1,0 +1,60 @@
+h1. FormtasticAutocomplete
+
+An extension for Formtastic[1] to generate AJAX autocomplete dropdown inputs for associations.
+
+**This is in a VERY early stage and needs a lot of work before I'd consider it fit for use**
+
+h2. Example
+
+Where Task#user is a :belongs_to association
+
+h3. The Form
+
+<pre><code><% semantic_form_for @task do |form| %>
+  <% form.inputs do %>
+    <%= form.input :user, :as => :autocomplete, :url => autocomplete_users_path %>
+  <% end %>
+<% end %></code></pre>
+
+h3. The Association's Controller
+
+params[:q] is the search field content.
+
+<pre><code>class UsersController < ApplicationController
+  def autocomplete
+    @users = User.find(:all, :conditions => ['name LIKE ?', "%#{params[:q]}%"])
+    render :layout => false
+  end
+end</code></pre>
+
+h3. The Autocomplete View
+
+<pre><code><ul>
+<%- for user in @users -%>
+  <%= content_tag :li, h(user.name), :id => "result_#{user.id}" %>
+<%- end -%>
+</ul></code></pre>
+
+h2. Dependencies
+
+You must have the formtastic gem added to your application, and the :defaults javascript must be included in your layout.
+
+The default stylesheet can be installed using the generator:
+
+<pre><code>./script/generate formtastic_autocomplete</code></pre>
+
+Don't forget to add it to your application layout
+
+<pre><code><%= stylesheet_link_tag 'autocomplete' %></code></pre>
+
+h2. Todo
+
+Test, test, test...
+
+Attempt to port this to unobtrusive javascript, create and provide graceful degradation if possible.
+
+h2. References
+
+fn1. "Formtastic @ GitHub":http://github.com/justinfrench/formtastic
+
+Copyright (c) 2009 Paul Smith, released under the MIT license
