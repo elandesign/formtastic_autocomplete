@@ -13,7 +13,7 @@ module ElanDesign
           autocomplete_multi_field(method, options)
         else
           self.label(method, options_for_label(options).merge(:for => "#{@object_name}_#{method}_autocomplete")) +
-          autocomplete_single_field(method, options)
+          autocomplete_single_field(association, options)
         end
       end
 
@@ -39,13 +39,14 @@ module ElanDesign
         template.image_tag(options[:indicator], :alt => 'Working', :id => "#{@object_name}_#{method}_indicator", :class => 'indicator', :style => 'display: none')
       end
 
-      def autocomplete_single_field(method, options)
+      def autocomplete_single_field(association, options)
+        method = association.name
         label = options[:label_method] || detect_label_method(object.send(method).to_a)
         value = options[:value_method] || :id
         current_value = object.send(method).nil? ? '' : object.send(method).send(label)
         input_name = "#{@object_name}_#{generate_association_input_name(method)}"
         template.text_field_tag("q", current_value, :id => "#{@object_name}_#{method}_autocomplete") + 
-        hidden_field("#{method}_id") +
+        hidden_field(association.options[:foreign_key]) +
         autocomplete_indicator(method, options) + 
         template.content_tag(:div, "", :id => "#{@object_name}_#{method}_results") +
         template.javascript_tag(<<-EOT
@@ -61,7 +62,7 @@ EOT
 
       end
 
-      def autocomplete_multi_field(method, options)
+      def autocomplete_multi_field(association, options)
 
         label = options[:label_method] || detect_label_method(object.send(method))
         value = options[:value_method] || :id
