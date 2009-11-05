@@ -1,5 +1,9 @@
-form.formtastic div.auto_complete{width:350px;background:#fff;}
-form.formtastic div.auto_complete ul{border:1px solid #888;margin:0;padding:0;width:100%;list-style-type:none;}
-form.formtastic div.auto_complete ul li{margin:0;padding:3px;}
-form.formtastic div.auto_complete ul li.selected{background-color:#ffb;}
-form.formtastic div.auto_complete ul strong.highlight{color:#800;margin:0;padding:0;}
+form.formtastic fieldset ol li.autocomplete input { font-family: inherit; border: 1px solid #ccc; padding: 3px !important; width: 292px; background: white url(../images/dropdown.png) 280px center no-repeat; }
+form.formtastic li.autocomplete div.auto_complete { width:300px; background:white;z-index:100; }
+form.formtastic li.autocomplete div.auto_complete ul { border:1px solid #ccc; border-top: none; margin:0; padding:0; width:298px; list-style-type:none; }
+form.formtastic li.autocomplete div.auto_complete ul li { margin:0; padding:3px; width: 292px; }
+form.formtastic li.autocomplete div.auto_complete ul li.selected { background-color:#ffb; }
+form.formtastic li.autocomplete div.auto_complete ul strong.highlight { color:#800; margin:0; padding:0; }
+form.formtastic li.autocomplete ul.auto_complete_selections li { border:1px solid #ccc; border-bottom: none; margin:0; padding:3px; width:292px; list-style-type:none; }
+form.formtastic li.autocomplete ul.auto_complete_selections li a { float: right; }
+form.formtastic li.autocomplete .indicator { margin-left: 8px; top: 2px; position: relative; }

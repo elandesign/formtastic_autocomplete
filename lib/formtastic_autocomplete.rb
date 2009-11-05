@@ -10,7 +10,7 @@ module ElanDesign
         if [:has_many, :has_and_belongs_to_many].include?(association.macro)
           self.label(method, options_for_label(options).merge(:for => "#{@object_name}_#{method}_autocomplete")) +
           autocomplete_existing_entries(method, options) + 
-          autocomplete_multi_field(method, options)
+          autocomplete_multi_field(association, options)
         else
           self.label(method, options_for_label(options).merge(:for => "#{@object_name}_#{method}_autocomplete")) +
           autocomplete_single_field(association, options)
@@ -22,7 +22,7 @@ module ElanDesign
         value = options[:value_method] || :id
         remove_link = options[:remove_link] || 'Remove'
         id_stub = "selected_#{@object_name}_#{method}"
-        template.content_tag(:ul, :id => id_stub) do
+        template.content_tag(:ul, :id => id_stub, :class => 'auto_complete_selections') do
           object.send(method).map { |selection|
             template.content_tag(:li, 
               template.hidden_field_tag("#{@object_name}[#{method.to_s.singularize}_ids][]", selection.send(value), :id => nil) + 
@@ -48,7 +48,7 @@ module ElanDesign
         template.text_field_tag("q", current_value, :id => "#{@object_name}_#{method}_autocomplete") + 
         hidden_field(association.options[:foreign_key]) +
         autocomplete_indicator(method, options) + 
-        template.content_tag(:div, "", :id => "#{@object_name}_#{method}_results") +
+        template.content_tag(:div, "", :id => "#{@object_name}_#{method}_results", :class => 'auto_complete') +
         template.javascript_tag(<<-EOT
   new Ajax.Autocompleter('#{@object_name}_#{method}_autocomplete', '#{@object_name}_#{method}_results', '#{options[:url]}', {
     updateElement: function(li) {
@@ -63,14 +63,14 @@ EOT
       end
 
       def autocomplete_multi_field(association, options)
-
+        method = association.name
         label = options[:label_method] || detect_label_method(object.send(method))
         value = options[:value_method] || :id
         remove_link = options[:remove_link] || 'Remove'
 
         template.text_field_tag("q", '', :id => "#{@object_name}_#{method}_autocomplete") +
         autocomplete_indicator(method, options) + 
-        template.content_tag(:div, "", :id => "#{@object_name}_#{method}_results") +
+        template.content_tag(:div, "", :id => "#{@object_name}_#{method}_results", :class => 'auto_complete') +
         template.javascript_tag(<<-EOT
   new Ajax.Autocompleter('#{@object_name}_#{method}_autocomplete', '#{@object_name}_#{method}_results', '#{options[:url]}', {
     updateElement: function(li) {
